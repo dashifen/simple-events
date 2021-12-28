@@ -2,6 +2,7 @@
   "name": "dashifen/simple-events",
   "description": "A very simple event post type and display for WordPress.",
   "minimum-stability": "stable",
+  "type": "wordpress-plugin",
   "license": "MIT",
   "authors": [
     {

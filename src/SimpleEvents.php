@@ -1,6 +1,6 @@
 <?php
 
-namespace Dashifen\SimpleEvents\SimpleEvents;
+namespace Dashifen\SimpleEvents;
 
 use Dashifen\WPHandler\Handlers\AbstractHandler;
 use Dashifen\WPHandler\Handlers\HandlerException;
