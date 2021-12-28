@@ -1,4 +1,16 @@
 <?php
+/**
+ * Plugin Name:       Simple Events
+ * Plugin URI:        https://github.com/dashifen/simple-events
+ * Description:       A very simple event post type and display for WordPress.
+ * Version:           1.0.0
+ * Requires at least: 5.8.2
+ * Requires PHP:      7.4
+ * Author:            David Dashifen Kees
+ * Author URI:        https://dashifen.com
+ * License:           MIT
+ * License URI:       https://choosealicense.com/licenses/mit/
+ */
 
 namespace Dashifen;
 
