@@ -2,6 +2,7 @@
 
 namespace Dashifen\SimpleEvents\Agents;
 
+use Dashifen\SimpleEvents\SimpleEvents;
 use Dashifen\WPHandler\Handlers\HandlerException;
 use Dashifen\WPHandler\Agents\AbstractPluginAgent;
 use Dashifen\WPHandler\Traits\TaxonomyRegistrationTrait;
@@ -38,7 +39,7 @@ class EventTaxonomyAgent extends AbstractPluginAgent
    */
   protected function registerTaxonomy()
   {
-    register_taxonomy('event-type', ['simple-event'], [
+    register_taxonomy(SimpleEvents::TAXONOMY, ['simple-event'], [
       'labels'            => $this->getTaxonomyLabels('Event Type', 'Event Types'),
       'hierarchical'      => true,
       'public'            => true,

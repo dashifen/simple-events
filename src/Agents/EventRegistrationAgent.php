@@ -2,6 +2,7 @@
 
 namespace Dashifen\SimpleEvents\Agents;
 
+use Dashifen\SimpleEvents\SimpleEvents;
 use Dashifen\WPHandler\Handlers\HandlerException;
 use Dashifen\WPHandler\Agents\AbstractPluginAgent;
 use Dashifen\WPHandler\Traits\PostTypeRegistrationTrait;
@@ -33,7 +34,7 @@ class EventRegistrationAgent extends AbstractPluginAgent
    */
   protected function registerEventType(): void
   {
-    register_post_Type('simple-event', [
+    register_post_Type(SimpleEvents::POST_TYPE, [
       'label'               => 'Event',
       'description'         => 'A simple event post type for WordPress.',
       'labels'              => $this->getPostTypeLabels('Event', 'Events'),

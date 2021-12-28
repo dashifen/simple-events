@@ -15,8 +15,10 @@
 namespace Dashifen;
 
 use Dashifen\Exception\Exception;
-use Dashifen\SimpleEvents\SimpleEvents\SimpleEvents;
+use Dashifen\SimpleEvents\SimpleEvents;
+use Dashifen\SimpleEvents\Agents\EventMetaAgent;
 use Dashifen\SimpleEvents\Agents\EventTaxonomyAgent;
+use Dashifen\SimpleEvents\Agents\EventListingAgent;
 use Dashifen\SimpleEvents\Agents\EventRegistrationAgent;
 use Dashifen\WPHandler\Agents\Collection\Factory\AgentCollectionFactory;
 
@@ -39,6 +41,8 @@ if (!class_exists(SimpleEvents::class)) {
   try {
     $simpleEvents = new SimpleEvents();
     $agentCollectionFactory = new AgentCollectionFactory();
+    $agentCollectionFactory->registerAgent(EventListingAgent::class);
+    $agentCollectionFactory->registerAgent(EventMetaAgent::class);
     $agentCollectionFactory->registerAgent(EventRegistrationAgent::class);
     $agentCollectionFactory->registerAgent(EventTaxonomyAgent::class);
     $simpleEvents->setAgentCollection($agentCollectionFactory);

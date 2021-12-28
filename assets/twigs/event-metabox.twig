@@ -1,0 +1,40 @@
+<div class="wrap">
+  <table class="form_table simple-events-event-information">
+    <tr>
+      <th>
+        <label for="event-date">Date:</label>
+      </th>
+      <td>
+        <input type="date" id="event-date" name="date" value="{{ _date }}"
+          required aria-required="true">
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <label for="event-time">Time:</label>
+      </th>
+      <td>
+        <input type="time" id="event-time" name="time" value="{{ _time }}"
+          required aria-required="true">
+      </td>
+    </tr>
+    <tr>
+      <th><label for="event-duration">Duration:</label></th>
+      <td>
+        <input type="number" id="event-duration" name="duration"
+          value="{{ _duration }}" min=".5" step=".25" required
+          aria-required="true">
+        <p class="description">(in hours)</p>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <label for="event-host">Host:</label>
+      </th>
+      <td>
+        <input type="text" id="event-host" name="host" value="{{ host }}"
+          required aria-required="true">
+      </td>
+    </tr>
+  </table>
+</div>

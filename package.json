@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "license": "MIT",
+  "version": "1.0.0",
+  "name": "simple-events",
+  "description": "A very simple event post type and display for WordPress.",
+  "repository": "https://github.com/dashifen/simple-events.git",
+  "author": "David Dashifen Kees <dashifen@dashifen.com>",
+  "devDependencies": {
+    "@babel/core": "7.14.*",
+    "@babel/preset-env": "7.14.*",
+    "@babel/preset-react": "7.0.*",
+    "babel-preset-minify": "0.5.*",
+    "babelify": "10.0.*",
+    "browserify": "16.2.*",
+    "gulp": "^4.0.*",
+    "gulp-babel": "8.0.*",
+    "gulp-concat": "2.6.*",
+    "gulp-rename": "2.0.*",
+    "gulp-touch-fd": "2.0.*",
+    "gulp-uglify": "^3.0.*",
+    "vinyl-buffer": "1.0.*",
+    "vinyl-source-stream": "2.0.*"
+  }
+}

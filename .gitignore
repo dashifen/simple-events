@@ -77,7 +77,6 @@ composer.phar
 coverage
 crashlytics-build.properties
 crashlytics.properties
-dist
 ehthumbs.db
 ehthumbs_vista.db
 fabric.properties
