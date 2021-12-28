@@ -1,0 +1,24 @@
+{
+  "name": "dashifen/simple-events",
+  "description": "A very simple event post type and display for WordPress.",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "David Dashifen Kees",
+      "email": "dashifen@dashifen.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Dashifen\\SimpleEvents\\": "src"
+    }
+  },
+  "require": {
+    "dashifen/wp-handler": "^10.10"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  }
+}
