@@ -56,21 +56,22 @@ class EventListingAgent extends AbstractPluginAgent
         // meta data after it.  the information we want to add here can be
         // found in the POST_META constant of our EventMetaAgent object.
         
-        foreach (EventMetaAgent::POST_META as $key => $display) {
-          if (substr($key, 0, 1) !== '_') {
-            
-            // there are some private meta keys for which we don't want to add
-            // columns.  therefore, only if the first character of our keys is
-            // not an underscore do we actually add this information to our
-            // modified list of columns.
-            
-            $modified[$key] = $display;
-          }
+        foreach ($this->getPertinentMeta() as $key => $display) {
+          $modified[$key] = $display;
         }
       }
     }
     
     return $modified;
+  }
+  
+  private function getPertinentMeta(): array
+  {
+    return array_filter(
+      EventMetaAgent::POST_META,
+      fn($key) => in_array($key, ['datetime', 'duration', 'host', 'private']),
+      ARRAY_FILTER_USE_KEY
+    );
   }
   
   /**
@@ -97,3 +98,5 @@ class EventListingAgent extends AbstractPluginAgent
     }
   }
 }
+
+

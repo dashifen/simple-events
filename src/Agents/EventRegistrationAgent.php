@@ -38,7 +38,7 @@ class EventRegistrationAgent extends AbstractPluginAgent
       'label'               => 'Event',
       'description'         => 'A simple event post type for WordPress.',
       'labels'              => $this->getPostTypeLabels('Event', 'Events'),
-      'supports'            => ['title', 'editor', 'thumbnail', 'revisions', 'custom-fields', 'page-attributes'],
+      'supports'            => ['title', 'editor', 'thumbnail', 'revisions', 'custom-fields'],
       'hierarchical'        => false,
       'public'              => true,
       'show_ui'             => true,

@@ -1,15 +1,9 @@
-.simple-events-event-information td,
-.simple-events-event-information th {
-  padding: 5px;
-}
-
-.simple-events-event-information th {
-  padding-top: 10px;
-  text-align: right;
-  vertical-align: top;
-}
-
+.simple-events-event-information,
 .simple-events-event-information input {
   max-width: 200px;
   width: 100%;
+}
+
+.simple-events-event-information .components-base-control__help {
+  margin-bottom: 0;
 }

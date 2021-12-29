@@ -5,11 +5,8 @@ const gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   touch = require('gulp-touch-fd');
 
-/*
- * [TASK FUNCTION] Build JS files.
- */
 function jsTask() {
-  return browserify({entries: ['assets/scripts/simple-events.js']})
+  return browserify({entries: ['assets/scripts/app.js']})
     .transform('babelify', {presets: ['@babel/preset-env', '@babel/preset-react']})
     .bundle()
     .pipe(source('simple-events.min.js'))
@@ -19,9 +16,18 @@ function jsTask() {
     .pipe(touch());
 }
 
-function buildTask(done) {
+gulp.task('default', () => {
   jsTask();
-  done();
-}
+});
 
-gulp.task('default', buildTask);
+gulp.task('build', () => {
+  jsTask();
+});
+
+gulp.task('watch', () => {
+  gulp.watch('assets/scripts/*.js', () => {
+    jsTask();
+  });
+});
+
+

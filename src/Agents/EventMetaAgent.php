@@ -2,24 +2,47 @@
 
 namespace Dashifen\SimpleEvents\Agents;
 
-use Timber\Timber;
 use Dashifen\SimpleEvents\SimpleEvents;
-use Dashifen\Transformer\TransformerException;
 use Dashifen\WPHandler\Handlers\HandlerException;
+use Dashifen\CaseChangingTrait\CaseChangingTrait;
 use Dashifen\WPHandler\Agents\AbstractPluginAgent;
 use Dashifen\WPHandler\Traits\PostMetaManagementTrait;
+use Dashifen\SimpleEvents\Services\PostMetaTransformer;
+use Dashifen\WPHandler\Handlers\Plugins\PluginHandlerInterface;
+use Dashifen\Transformer\StorageTransformer\StorageTransformerInterface;
 
 class EventMetaAgent extends AbstractPluginAgent
 {
+  use CaseChangingTrait;
   use PostMetaManagementTrait;
   
   public const POST_META = [
-    '_time'     => 'Time',
-    '_date'     => 'Date',
-    '_duration' => 'Duration',          // in minutes
-    'datetime'  => 'Date & Time',
-    'host'      => 'Host',
+    'host'     => 'Host',
+    'time'     => 'Time',
+    'date'     => 'Date',
+    'datetime' => 'Date & Time',
+    'duration' => 'Duration',       // in hours rounded to the nearest quarter
+    'location' => 'Location',
+    'private'  => 'Private',
   ];
+  
+  private StorageTransformerInterface $transformer;
+  
+  /**
+   * AbstractPluginService constructor.
+   *
+   * @param PluginHandlerInterface           $handler
+   * @param StorageTransformerInterface|null $transformer
+   *
+   * @throws HandlerException
+   */
+  public function __construct(
+    PluginHandlerInterface       $handler,
+    ?StorageTransformerInterface $transformer = null
+  ) {
+    parent::__construct($handler);
+    $this->transformer = $transformer ?? new PostMetaTransformer();
+  }
   
   /**
    * initialize
@@ -32,66 +55,30 @@ class EventMetaAgent extends AbstractPluginAgent
    */
   public function initialize(): void
   {
-    $this->addAction('add_meta_boxes', 'addEventMetabox');
-  }
-  
-  protected function addEventMetabox(): void
-  {
-    add_meta_box(SimpleEvents::POST_TYPE . '-metabox', 'Event Information',
-      [$this, 'showEventMetaBox'], SimpleEvents::POST_TYPE, 'normal',
-      'high', ['__block_editor_compatible_meta_box' => true]);
+    $this->addAction('init', 'registerMeta');
   }
   
   /**
-   * showEventMetaBox
+   * registerMeta
    *
-   * Displays the event metabox in the editor.  Public because it's called via
-   * an internal callback within WordPress core and we're not sure exactly how
-   * we could add that as a hook within this agent.
+   * Registers our post metadata with WordPress Core so that the JavaScript
+   * editor plugin can get and set them.
    *
    * @return void
-   * @throws HandlerException
-   * @throws TransformerException
    */
-  public function showEventMetaBox(): void
+  protected function registerMeta(): void
   {
-    $id = get_the_ID();
-    $keys = array_keys(self::POST_META);
-    
-    // since the values for our metadata all get selected with the same method,
-    // we can use array_map to "loop" over the keys and call getPostMeta for
-    // each of them. then, when we render our twig, we can combine the keys and
-    // their selected values as the context for it.
-    
-    $values = array_map(fn($key) => $this->getMetaValue($id, $key), $keys);
-    Timber::render('event-metabox.twig', array_combine($keys, $values));
-  }
-  
-  /**
-   * getMetaValue
-   *
-   * While the getPostMeta method will handle the majority of the work we need
-   * to do when getting meta data, this method enhances it by specifying better
-   * defaults based on which key we're selecting.
-   *
-   * @param int    $postId
-   * @param string $metaKey
-   *
-   * @return string
-   * @throws HandlerException
-   * @throws TransformerException
-   */
-  private function getMetaValue(int $postId, string $metaKey): string
-  {
-    switch($metaKey) {
-      default:
-        return $this->getPostMeta($postId, $metaKey);
-        
-      case '_duration':
-        return $this->getPostMeta($postId, $metaKey, 1);
-        
-      case 'host':
-        return $this->getPostMeta($postId, $metaKey, wp_get_current_user()->display_name);
+    foreach (array_keys(self::POST_META) as $metaKey) {
+      $fullMetaKey = $this->getFullPostMetaName($metaKey);
+      register_post_meta(SimpleEvents::POST_TYPE, $fullMetaKey, [
+        'type'              => $metaKey === 'duration' ? 'number' : 'string',
+        'show_in_rest'      => true,
+        'single'            => true,
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback'     => function () {
+          return current_user_can('edit_posts');
+        },
+      ]);
     }
   }
   
@@ -121,9 +108,11 @@ class EventMetaAgent extends AbstractPluginAgent
    */
   public function getPostMetaNamePrefix(): string
   {
-    // our post type is "simple-event" so by returning it along with a hyphen,
-    // our post meta will have keys like simple-event-host in the database.
+    // our post type is "simple-event" so by returning it along with a hyphen
+    // and then converting to snake case, our meta names become something like
+    // simple_event_host.  we use snake case for them because that's what works
+    // best for JavaScript object properties.
     
-    return SimpleEvents::POST_TYPE . '-';
+    return $this->kebabToSnakeCase(SimpleEvents::POST_TYPE . '-');
   }
 }
