@@ -30,24 +30,7 @@ class SimpleEvents extends AbstractPluginHandler
     // not they've "missed" their window.
     
     $this->addAction('init', 'initializeAgents', 0);
-    $this->addFilter('timber/locations', 'addTwigLocation');
     $this->addAction('admin_enqueue_scripts', 'addAdminAssets');
-  }
-  
-  /**
-   * addTwigLocations
-   *
-   * Adds the location for this plugin's twig files to Timber's array of
-   * possible locations for such files.
-   *
-   * @param array $locations
-   *
-   * @return array
-   */
-  protected function addTwigLocation(array $locations): array
-  {
-    $locations[] = $this->getPluginDir() . '/assets/twigs/';
-    return $locations;
   }
   
   /**
