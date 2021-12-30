@@ -30,7 +30,24 @@ class SimpleEvents extends AbstractPluginHandler
     // not they've "missed" their window.
     
     $this->addAction('init', 'initializeAgents', 0);
+    $this->addFilter('timber/locations', 'addTwigLocation');
     $this->addAction('admin_enqueue_scripts', 'addAdminAssets');
+  }
+  
+  /**
+   * addTwigLocation
+   *
+   * Adds the location of this plugin's twig files to Timber's internal list
+   * of such locations.
+   *
+   * @param array $locations
+   *
+   * @return array
+   */
+  protected function addTwigLocation(array $locations): array
+  {
+    $locations[] = $this->getPluginDir() . '/assets/twigs/';
+    return $locations;
   }
   
   /**
@@ -44,7 +61,7 @@ class SimpleEvents extends AbstractPluginHandler
   protected function addAdminAssets(): void
   {
     if ($this->isEventEditor()) {
-      $this->enqueue('assets/simple-events.min.js');
+      $this->enqueue('assets/simple-events-postmeta.min.js');
       $this->enqueue('assets/simple-events.css');
     }
   }
@@ -92,5 +109,18 @@ class SimpleEvents extends AbstractPluginHandler
   private function getMetaAgent(): EventMetaAgent
   {
     return $this->agentCollection[EventMetaAgent::class];
+  }
+  
+  /**
+   * getPostMetaPrefix
+   *
+   * Passes the request for this plugin's post meta prefix over to the Agent
+   * that handles such thing.
+   *
+   * @return string
+   */
+  public function getPostMetaPrefix(): string
+  {
+    return $this->getMetaAgent()->getPostMetaNamePrefix();
   }
 }

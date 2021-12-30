@@ -27,7 +27,9 @@ class EventTaxonomyAgent extends AbstractPluginAgent
     // registered at priority level 10, we'll register it at 15 to be sure that
     // its type exists
     
-    $this->addAction('init', 'registerTaxonomy', 15);
+    if (!$this->isInitialized()) {
+      $this->addAction('init', 'registerTaxonomy', 15);
+    }
   }
   
   /**

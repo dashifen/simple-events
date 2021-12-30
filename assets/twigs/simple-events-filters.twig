@@ -1,0 +1,14 @@
+<label for="{{ id }}" class="screen-reader-text">
+  Filter by {{ label }}
+</label>
+
+<select id="{{ id }}" name="{{ name }}">
+  <option value="{{ all_value ? all_value : '' }}">{{ all }}</option>
+
+  {% for value, text in options %}
+    <option
+      value="{{ function('esc_attr', value) }}"
+      {% if value == current %} selected {% endif %}
+    >{{ text }}</option>
+  {% endfor %}
+</select>

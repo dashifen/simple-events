@@ -55,7 +55,9 @@ class EventMetaAgent extends AbstractPluginAgent
    */
   public function initialize(): void
   {
-    $this->addAction('init', 'registerMeta');
+    if (!$this->isInitialized()) {
+      $this->addAction('init', 'registerMeta');
+    }
   }
   
   /**

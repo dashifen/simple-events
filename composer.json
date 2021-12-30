@@ -16,7 +16,8 @@
     }
   },
   "require": {
-    "dashifen/wp-handler": "^10.10"
+    "dashifen/wp-handler": "^10.10",
+    "timber/timber": "^1.19"
   },
   "config": {
     "optimize-autoloader": true,

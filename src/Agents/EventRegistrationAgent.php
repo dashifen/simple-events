@@ -22,7 +22,9 @@ class EventRegistrationAgent extends AbstractPluginAgent
    */
   public function initialize(): void
   {
-    $this->addAction('init', 'registerEventType');
+    if(!$this->isInitialized()) {
+      $this->addAction('init', 'registerEventType');
+    }
   }
   
   /**

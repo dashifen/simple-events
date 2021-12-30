@@ -1,33 +1,30 @@
-const gulp = require('gulp'),
+const {src, dest, parallel, task, watch} = require('gulp'),
   browserify = require('browserify'),
   buffer = require('vinyl-buffer'),
+  sass = require('gulp-sass'),
   source = require('vinyl-source-stream'),
-  uglify = require('gulp-uglify'),
-  touch = require('gulp-touch-fd');
+  uglify = require('gulp-uglify');
 
-function jsTask() {
-  return browserify({entries: ['assets/scripts/app.js']})
+function postmetaPluginJs() {
+  return browserify({entries: ['assets/scripts/postmeta/index.js']})
     .transform('babelify', {presets: ['@babel/preset-env', '@babel/preset-react']})
     .bundle()
-    .pipe(source('simple-events.min.js'))
+    .pipe(source('simple-events-postmeta.min.js'))
     .pipe(buffer())
     .pipe(uglify())
-    .pipe(gulp.dest('assets'))
-    .pipe(touch());
+    .pipe(dest('assets'));
 }
 
-gulp.task('default', () => {
-  jsTask();
-});
+async function build() {
+  parallel(postmetaPluginJs);
+}
 
-gulp.task('build', () => {
-  jsTask();
-});
+function watcher() {
+  postmetaPluginJs();
+  watch(['assets/scripts/postmeta/*.js'], postmetaPluginJs());
+}
 
-gulp.task('watch', () => {
-  gulp.watch('assets/scripts/*.js', () => {
-    jsTask();
-  });
-});
-
-
+task('postmeta', postmetaPluginJs);
+task('default', build);
+task('watch', watcher);
+task('build', build);
