@@ -2,12 +2,11 @@
 
 namespace Dashifen\SimpleEvents\Agents;
 
-use WP_Term;
-use WP_Post;
 use Dashifen\SimpleEvents\SimpleEvents;
 use Dashifen\Repository\RepositoryException;
 use Dashifen\SimpleEvents\Repositories\Event;
 use Dashifen\Transformer\TransformerException;
+use Dashifen\SimpleEvents\Repositories\Calendar;
 use Dashifen\WPHandler\Handlers\HandlerException;
 use Dashifen\WPHandler\Agents\AbstractPluginAgent;
 
@@ -51,7 +50,7 @@ class EventBlocksAgent extends AbstractPluginAgent
       ]
     );
     
-    /*register_block_type(
+    register_block_type(
       'simple-events/calendar',
       [
         'render_callback' => [$this, 'renderCalendar'],
@@ -60,7 +59,7 @@ class EventBlocksAgent extends AbstractPluginAgent
           'withPrivate' => ['type' => 'boolean'],
         ],
       ]
-    );*/
+    );
   }
   
   /**
@@ -76,7 +75,23 @@ class EventBlocksAgent extends AbstractPluginAgent
       $event = new Event($attributes['postId'] ?? null, $this->handler);
       return $event->render();
     } catch (RepositoryException $e) {
-      self::debug($e, true);
+      return $e->getMessage();
+    }
+  }
+  
+  public function renderCalendar(array $attributes): string
+  {
+    $attributes = wp_parse_args($attributes, [
+      'type'  => 0,
+      'year'  => date('Y'),
+      'month' => date('n'),
+    ]);
+    
+    try {
+      $calendar = new Calendar($attributes);
+      return $calendar->render();
+    } catch (RepositoryException $e) {
+      return $e->getMessage();
     }
   }
   
@@ -100,28 +115,28 @@ class EventBlocksAgent extends AbstractPluginAgent
       ],
     ]);
     
-    if (sizeof($events) === 0) {
-      return '[]';
+    if (sizeof($events) !== 0) {
+      foreach ($events as $event) {
+        $eventMap[] = ['value' => $event->ID, 'label' => $event->post_title];
+      }
     }
     
-    $eventMap = [['value' => '', 'label' => 'Select an event']];
-    foreach ($events as $event) {
-      $eventMap[] = ['value' => $event->ID, 'label' => $event->post_title];
-    }
-    
-    return json_encode($eventMap);
+    return json_encode($eventMap ?? []);
   }
   
   private function getTypes(): string
   {
     $types = get_terms(['taxonomy' => SimpleEvents::TAXONOMY]);
-    if (sizeof($types) === 0) {
-      return '[]';
+    
+    if (sizeof($types) !== 0) {
+      $typeMap[] = ['value' => '0', 'label' => 'All types'];
+      
+      foreach ($types as $type) {
+        $typeMap[] = ['value' => $type->term_id, 'label' => $type->name];
+      }
     }
     
-    $slugs = array_map(fn(WP_Term $term) => $term->slug, $types);
-    $names = array_map(fn(WP_Term $term) => $term->name, $types);
-    return json_encode(array_combine($slugs, $names));
+    return json_encode($typeMap ?? []);
   }
   
   protected function addEventBlockCategory(array $blockCategories): array

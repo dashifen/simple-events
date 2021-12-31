@@ -70,12 +70,12 @@ class Event extends Repository
     $context['permalink'] = get_permalink($this->id);
     
     $context['classes'] = [];
-    $context['classes']['event'] = apply_filters('simple-event-classes', 'simple-event');
-    $context['classes']['header'] = apply_filters('simple-event-header-classes', 'simple-event-header');
+    $context['classes']['event'] = apply_filters('simple-event-classes', 'simple-events-event');
+    $context['classes']['header'] = apply_filters('simple-event-header-classes', 'simple-events-header');
     foreach (array_keys(EventMetaAgent::POST_META) as $key) {
       $context['classes'][$key] = apply_filters(
-        'simple-event-' . $key . '-classes',
-        'simple-event-' . $key
+        'simple-events-' . $key . '-classes',
+        'simple-events-' . $key
       );
     }
     
