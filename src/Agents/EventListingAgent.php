@@ -67,6 +67,12 @@ class EventListingAgent extends AbstractPluginAgent
   protected function addColumns(array $original): array
   {
     $modified = [];
+    
+    // first, to avoid confusion with respect to the event's date vs. the
+    // post's publication date, we'll remove the latter.  then, we loop over
+    // the remaining columns adding them to our modified array.
+    
+    unset($original['date']);
     foreach ($original as $column => $heading) {
       $modified[$column] = $heading;
       
@@ -305,7 +311,7 @@ class EventListingAgent extends AbstractPluginAgent
   /**
    * addMetaQuery
    *
-   * Merges a new meta query into any existing queries already present wihtin
+   * Merges a new meta query into any existing queries already present within
    * this query.
    *
    * @param WP_Query $query
