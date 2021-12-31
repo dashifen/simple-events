@@ -17,13 +17,13 @@ class EventMetaAgent extends AbstractPluginAgent
   use PostMetaManagementTrait;
   
   public const POST_META = [
-    'host'     => 'Host',
-    'time'     => 'Time',
-    'date'     => 'Date',
-    'datetime' => 'Date & Time',
-    'duration' => 'Duration',       // in hours rounded to the nearest quarter
-    'location' => 'Location',
-    'private'  => 'Private',
+    'host'       => 'Host',
+    'time'       => 'Time',
+    'date'       => 'Date',
+    'datetime'   => 'Date & Time',
+    'duration'   => 'Duration',     // in hours rounded to the nearest quarter
+    'location'   => 'Location',
+    'visibility' => 'Visibility',   // public or private
   ];
   
   private StorageTransformerInterface $transformer;

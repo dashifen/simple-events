@@ -1,6 +1,6 @@
 import Locker from './locker';
 
-const SimpleEventsEditorControls = {
+const PostmetaLocks = {
   /**
    * onLoad
    *
@@ -75,4 +75,4 @@ const SimpleEventsEditorControls = {
   }
 };
 
-export default SimpleEventsEditorControls;
+export default PostmetaLocks;

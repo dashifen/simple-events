@@ -1,0 +1,22 @@
+<div class="{{ classes.event }}" data-event-id="{{ id }}">
+  <header class="{{ classes.heading }}">
+    <a href="{{ permalink }}">{{ title }}</a>
+  </header>
+  <p class="{{ classes.visibility }}">This is a {{ visibility }} event.</p>
+  <dl>
+    <dt class="{{ classes.date }}">Date</dt>
+    <dd class="{{ classes.date }}">{{ date }}</dd>
+    <dt class="{{ classes.time }}">Time</dt>
+    <dd class="{{ classes.time }}">{{ time }}</dd>
+    <dt class="{{ classes.duration }}">Duration</dt>
+    <dd class="{{ classes.duration }}">{{ duration }}</dd>
+
+    {% if visibility == 'public' %}
+      <dt class="{{ classes.location }}">Location</dt>
+      <dd class="{{ classes.location }}">{{ location }}</dd>
+      <dt class="{{ classes.host }}">Host</dt>
+      <dd class="{{ classes.host }}">{{ host }}</dd>
+    {% endif %}
+  </dl>
+</div>
+

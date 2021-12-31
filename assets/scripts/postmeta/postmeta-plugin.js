@@ -5,7 +5,7 @@ const {PluginDocumentSettingPanel} = wp.editPost;
 const {TextControl, RadioControl, PanelRow} = wp.components;
 const {withSelect} = wp.data;
 
-const SimpleEventsEditorPlugin = ({postType, postMeta}) => {
+const PostmetaPlugin = ({postType, postMeta}) => {
 
   // if our post type is not the simple-event, then just return null.
   // otherwise, return the component that will be placed into the editor
@@ -82,8 +82,8 @@ const SimpleEventsEditorPlugin = ({postType, postMeta}) => {
           <RadioControl
             label="Public or Private?"
             className="simple-events-event-information"
-            selected={postMeta.simple_event_private}
-            onChange={(value) => MetaSetter.set('simple_event_private', value)}
+            selected={postMeta.simple_event_visibility}
+            onChange={(value) => MetaSetter.set('simple_event_visibility', value)}
             options={[
               {label: 'Public', value: 'public'},
               {label: 'Private', value: 'private'}
@@ -101,4 +101,4 @@ export default compose([
       postType: select('core/editor').getCurrentPostType(),
     };
   })
-])(SimpleEventsEditorPlugin);
+])(PostmetaPlugin);

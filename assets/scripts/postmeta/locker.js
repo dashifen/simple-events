@@ -3,7 +3,9 @@
 const Locker = {
 
   // this array keeps track of all of our locks.  note:  all locks must be
-  // released (i.e. false) before the post can be saved.
+  // released (i.e. false) before the post can be saved, and Gutenberg has
+  // locks of its own, so even if our locks are released, there might be other
+  // reasons that prevent saving.
 
   locks: [],
 

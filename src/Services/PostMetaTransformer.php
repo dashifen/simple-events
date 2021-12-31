@@ -30,11 +30,40 @@ class PostMetaTransformer extends AbstractStorageTransformer
   }
   
   /**
+   * transformDateFromStorage
+   *
+   * Given a date in YYYY-MM-DD format, converts it to the one that's specified
+   * in the WordPress settings.
+   *
+   * @param string $date
+   *
+   * @return string
+   */
+  protected function transformDateFromStorage(string $date): string
+  {
+    return date(get_option('date_format'), strtotime($date));
+  }
+  
+  /**
+   * transformTimeFromStorage
+   *
+   * Given a time in HH:MM format, converts it to the one that's specified in
+   * the WordPress settings.
+   *
+   * @param string $time
+   *
+   * @return string
+   */
+  protected function transformTimeFromStorage(string $time): string
+  {
+    return date(get_option('time_format'), strtotime($time));
+  }
+  
+  /**
    * transformDatetimeFromStorage
    *
-   * Given a datetime in YYYY-MM-DD HH:MM format, gets the date and time
-   * formats defined in the site's settings and uses them to produce a more
-   * human readable datetime.
+   * Given a datetime in YYYY-MM-DD HH:MM format, uses the above methods to
+   * produce a more human-readable format.
    *
    * @param string $datetime
    *
@@ -42,9 +71,8 @@ class PostMetaTransformer extends AbstractStorageTransformer
    */
   protected function transformDatetimeFromStorage(string $datetime): string
   {
-    $dateFormat = get_option('date_format');
-    $timeFormat = get_option('time_format');
-    return date($dateFormat . ' ' . $timeFormat, strtotime($datetime));
+    return $this->transformDateFromStorage($datetime)
+      . $this->transformTimeFromStorage($datetime);
   }
   
   /**

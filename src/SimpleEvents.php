@@ -12,7 +12,7 @@ class SimpleEvents extends AbstractPluginHandler
   public const POST_TYPE = 'simple-event';
   public const TAXONOMY = 'event-type';
   
-    /**
+  /**
    * initialize
    *
    * Uses addAction and/or addFilter to attach protected methods of this object
@@ -87,14 +87,20 @@ class SimpleEvents extends AbstractPluginHandler
    *
    * @param int    $postId
    * @param string $postMeta
+   * @param string $default
+   * @param bool   $transform
    *
    * @return string
    * @throws HandlerException
    * @throws TransformerException
    */
-  public function getPostMeta(int $postId, string $postMeta): string
+  public function getPostMeta(int $postId, string $postMeta, string $default = '', bool $transform = true): string
   {
-    return $this->getMetaAgent()->getPostMeta($postId, $postMeta);
+    // the scalar true value we send to getPostMeta indicates that these are
+    // all single values within this post's meta.  we don't need a parameter
+    // for that one this time because that's the case for all of our meta.
+    
+    return $this->getMetaAgent()->getPostMeta($postId, $postMeta, $default, true, $transform);
   }
   
   /**
