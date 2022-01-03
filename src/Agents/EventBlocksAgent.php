@@ -40,6 +40,13 @@ class EventBlocksAgent extends AbstractPluginAgent
     }
   }
   
+  /**
+   * registerBlocks
+   *
+   * Adds the simple-events blocks (event and calendar) to the editor.
+   *
+   * @return void
+   */
   protected function registerBlocks(): void
   {
     register_block_type(
@@ -63,6 +70,10 @@ class EventBlocksAgent extends AbstractPluginAgent
   }
   
   /**
+   * renderEvent
+   *
+   * Renders the event block.
+   *
    * @param array $attributes
    *
    * @return string
@@ -79,6 +90,15 @@ class EventBlocksAgent extends AbstractPluginAgent
     }
   }
   
+  /**
+   * renderCalendar
+   *
+   * Renders the calendar block.
+   *
+   * @param array $attributes
+   *
+   * @return string
+   */
   public function renderCalendar(array $attributes): string
   {
     $attributes = wp_parse_args($attributes, [
@@ -95,50 +115,28 @@ class EventBlocksAgent extends AbstractPluginAgent
     }
   }
   
+  /**
+   * addEditorAssets
+   *
+   * Adds then necessary JS to the editor so that our blocks function.
+   *
+   * @return void
+   */
   protected function addEditorAssets(): void
   {
-    $blockJs = $this->enqueue('assets/simple-events-blocks.min.js');
-    wp_add_inline_script($blockJs, 'window.simpleEvents=' . $this->getEvents() . ';');
-    wp_add_inline_script($blockJs, 'window.simpleEventsTypes=' . $this->getTypes() . ';');
+    $this->enqueue('assets/simple-events-blocks.min.js');
   }
   
-  private function getEvents(): string
-  {
-    $events = get_posts([
-      'post_type'  => SimpleEvents::POST_TYPE,
-      'orderby'    => 'datetime',
-      'meta_type'  => 'DATETIME',
-      'meta_query' => [
-        'datetime' => [
-          'key' => $this->handler->getPostMetaPrefix() . 'datetime',
-        ],
-      ],
-    ]);
-    
-    if (sizeof($events) !== 0) {
-      foreach ($events as $event) {
-        $eventMap[] = ['value' => $event->ID, 'label' => $event->post_title];
-      }
-    }
-    
-    return json_encode($eventMap ?? []);
-  }
-  
-  private function getTypes(): string
-  {
-    $types = get_terms(['taxonomy' => SimpleEvents::TAXONOMY]);
-    
-    if (sizeof($types) !== 0) {
-      $typeMap[] = ['value' => '0', 'label' => 'All types'];
-      
-      foreach ($types as $type) {
-        $typeMap[] = ['value' => $type->term_id, 'label' => $type->name];
-      }
-    }
-    
-    return json_encode($typeMap ?? []);
-  }
-  
+  /**
+   * addEventBlockCategory
+   *
+   * Adds the simple-events block category to the editor which contains our
+   * blocks.
+   *
+   * @param array $blockCategories
+   *
+   * @return array
+   */
   protected function addEventBlockCategory(array $blockCategories): array
   {
     $blockCategories[] = [

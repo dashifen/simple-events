@@ -1,4 +1,4 @@
-const {src, dest, task, watch} = require('gulp'),
+const {src, dest, parallel, task, watch} = require('gulp'),
   browserify = require('browserify'),
   buffer = require('vinyl-buffer'),
   sass = require('gulp-sass'),
@@ -26,12 +26,14 @@ function blockJs() {
 }
 
 async function build() {
-  postmetaPluginJs();
-  blockJs();
+  parallel(postmetaPluginJs, blockJs);
 }
 
 function watcher() {
-  watch(['assets/scripts/blocks/*.js'], blockJs());
+  blockJs();
+  postmetaPluginJs();
+  watch(['assets/scripts/postmeta/*.js'], postmetaPluginJs);
+  watch(['assets/scripts/blocks/*.js'], blockJs);
 }
 
 task('postmeta', postmetaPluginJs);

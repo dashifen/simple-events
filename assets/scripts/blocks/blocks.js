@@ -1,5 +1,5 @@
-import initializeEvent from './event';
-import initializeCalendar from './calendar'
+import initializeEventBlock from './event';
+import initializeCalendarBlock from './calendar';
 
-initializeEvent();
-initializeCalendar();
+initializeEventBlock();
+initializeCalendarBlock();
