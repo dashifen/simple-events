@@ -108,7 +108,7 @@ class EventBlocksAgent extends AbstractPluginAgent
     ]);
     
     try {
-      $calendar = new Calendar($attributes);
+      $calendar = new Calendar($attributes, $this->handler);
       return $calendar->render();
     } catch (RepositoryException $e) {
       return $e->getMessage();
